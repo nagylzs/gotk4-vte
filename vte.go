@@ -67,6 +67,16 @@ func (t *Terminal) FeedChild(text string) {
 	C.vte_terminal_feed_child(t.native(), str, C.gssize(len(text)))
 }
 
+// GetColumnCount https://gnome.pages.gitlab.gnome.org/vte/gtk3/method.Terminal.get_column_count.html
+func (t *Terminal) GetColumnCount() uint16 {
+	return uint16(C.vte_terminal_get_column_count(t.native()))
+}
+
+// GetRowCount https://gnome.pages.gitlab.gnome.org/vte/gtk3/method.Terminal.get_row_count.html
+func (t *Terminal) GetRowCount() uint16 {
+	return uint16(C.vte_terminal_get_row_count(t.native()))
+}
+
 func makeStrings(array []string) **C.char {
 	cArray := C.make_strings(C.int(len(array) + 1))
 	for i, e := range array {
