@@ -21,19 +21,28 @@ type Terminal struct {
 
 func wrapWidget(obj *glib.Object) *gtk.Widget {
 	return &gtk.Widget{
-		InitiallyUnowned: glib.InitiallyUnowned{obj},
+		InitiallyUnowned: glib.InitiallyUnowned{
+			Object: obj,
+		},
+		Object: obj,
+		Accessible: gtk.Accessible{
+			Object: obj,
+		},
+		Buildable: gtk.Buildable{
+			Object: obj,
+		},
+		ConstraintTarget: gtk.ConstraintTarget{
+			Object: obj,
+		},
 	}
 }
 
 func wrapTerminal(obj *glib.Object) *Terminal {
-	return &Terminal{gtk.Widget{
-		InitiallyUnowned: glib.InitiallyUnowned{obj},
-	}}
+	return &Terminal{*wrapWidget(obj)}
 }
 
 func (t *Terminal) native() *C.VteTerminal {
-	//t.Widget.Native()
-	p := unsafe.Pointer(t.Widget.Native())
+	p := unsafe.Pointer(t.Widget.Object.Native())
 	return C.toVteTerminal(p)
 }
 
