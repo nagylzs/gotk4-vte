@@ -77,6 +77,16 @@ func (t *Terminal) GetRowCount() uint16 {
 	return uint16(C.vte_terminal_get_row_count(t.native()))
 }
 
+// SetSize https://gnome.pages.gitlab.gnome.org/vte/gtk3/method.Terminal.set_size.html
+func (t *Terminal) SetSize(columns uint16, rows uint16) {
+	C.vte_terminal_set_size(t.native(), C.long(columns), C.long(rows))
+}
+
+// SetSize https://gnome.pages.gitlab.gnome.org/vte/gtk3/method.Terminal.set_size.html
+func (t *Terminal) SetFontScale(scale float64) {
+	C.vte_terminal_set_font_scale(t.native(), C.double(scale))
+}
+
 func makeStrings(array []string) **C.char {
 	cArray := C.make_strings(C.int(len(array) + 1))
 	for i, e := range array {
