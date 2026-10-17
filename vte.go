@@ -111,6 +111,15 @@ func (t *Terminal) PasteClipboard() {
 	C.vte_terminal_paste_clipboard(t.native())
 }
 
+// PasteText https://gnome.pages.gitlab.gnome.org/vte/gtk4/method.Terminal.paste_text.html
+// Unlike FeedChild, it handles the text as if it was pasted (e.g. applies bracketed paste mode).
+// It requires vte 0.68 or later, and returns false (doing nothing) when built with an older vte.
+func (t *Terminal) PasteText(text string) bool {
+	str := C.CString(text)
+	defer C.free(unsafe.Pointer(str))
+	return C.paste_text(t.native(), str) != 0
+}
+
 // PastePrimary https://gnome.pages.gitlab.gnome.org/vte/gtk4/method.Terminal.paste_primary.html
 func (t *Terminal) PastePrimary() {
 	C.vte_terminal_paste_primary(t.native())

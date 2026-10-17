@@ -12,19 +12,19 @@ Work in progress!
 
 - cgo
 - the GTK4 build of libvte with its development files: `libvte-2.91-gtk4-dev` on Debian/Ubuntu, `vte4` on Arch/Manjaro
-- `Terminal.SetContextMenuModel` requires vte 0.76 or later. With an older vte it compiles, but does nothing and
-  returns false.
+- `Terminal.SetContextMenuModel` requires vte 0.76 or later, `Terminal.PasteText` requires vte 0.68 or later. With an
+  older vte they compile, but do nothing and return false.
 
 ## Supported API
 
-| Area          | Methods                                                                       |
-|---------------|-------------------------------------------------------------------------------|
-| Create, spawn | `TerminalNew`, `SpawnAsyncSimple`                                             |
-| Input/output  | `Feed`, `FeedChild`                                                           |
-| Size          | `GetColumnCount`, `GetRowCount`, `SetSize`, `SetFontScale`                    |
-| Clipboard     | `CopyClipboardFormat`, `CopyPrimary`, `PasteClipboard`, `PastePrimary`        |
-| Selection     | `SelectAll`, `UnselectAll`, `GetHasSelection`, `ConnectSelectionChanged`      |
-| Context menu  | `SetContextMenuModel` (vte 0.76+)                                             |
+| Area          | Methods                                                                                         |
+|---------------|-------------------------------------------------------------------------------------------------|
+| Create, spawn | `TerminalNew`, `SpawnAsyncSimple`                                                               |
+| Input/output  | `Feed`, `FeedChild`                                                                             |
+| Size          | `GetColumnCount`, `GetRowCount`, `SetSize`, `SetFontScale`                                      |
+| Clipboard     | `CopyClipboardFormat`, `CopyPrimary`, `PasteClipboard`, `PastePrimary`, `PasteText` (vte 0.68+) |
+| Selection     | `SelectAll`, `UnselectAll`, `GetHasSelection`, `ConnectSelectionChanged`                        |
+| Context menu  | `SetContextMenuModel` (vte 0.76+)                                                               |
 
 `Terminal` embeds `gtk.Widget`, so all widget methods (event controllers, action groups etc.) are available too.
 

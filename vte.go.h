@@ -34,3 +34,13 @@ static inline gboolean set_context_menu_model(VteTerminal *terminal, GMenuModel 
     return FALSE;
 #endif
 }
+
+static inline gboolean paste_text(VteTerminal *terminal, const char *text)
+{
+#if VTE_CHECK_VERSION(0, 68, 0)
+    vte_terminal_paste_text(terminal, text);
+    return TRUE;
+#else
+    return FALSE;
+#endif
+}
