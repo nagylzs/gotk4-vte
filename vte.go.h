@@ -24,3 +24,13 @@ static VteTerminal *toVteTerminal(void *p)
 {
     return (VTE_TERMINAL(p));
 }
+
+static inline gboolean set_context_menu_model(VteTerminal *terminal, GMenuModel *model)
+{
+#if VTE_CHECK_VERSION(0, 76, 0)
+    vte_terminal_set_context_menu_model(terminal, model);
+    return TRUE;
+#else
+    return FALSE;
+#endif
+}

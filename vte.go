@@ -9,6 +9,7 @@ import "C"
 import (
 	"errors"
 	"github.com/diamondburned/gotk4/pkg/core/glib"
+	"github.com/diamondburned/gotk4/pkg/gio/v2"
 	"github.com/diamondburned/gotk4/pkg/gtk/v4"
 	"unsafe"
 )
@@ -85,6 +86,64 @@ func (t *Terminal) SetSize(columns uint16, rows uint16) {
 // SetSize https://gnome.pages.gitlab.gnome.org/vte/gtk3/method.Terminal.set_size.html
 func (t *Terminal) SetFontScale(scale float64) {
 	C.vte_terminal_set_font_scale(t.native(), C.double(scale))
+}
+
+// Format https://gnome.pages.gitlab.gnome.org/vte/gtk4/enum.Format.html
+type Format int
+
+const (
+	FormatText Format = C.VTE_FORMAT_TEXT
+	FormatHTML Format = C.VTE_FORMAT_HTML
+)
+
+// CopyClipboardFormat https://gnome.pages.gitlab.gnome.org/vte/gtk4/method.Terminal.copy_clipboard_format.html
+func (t *Terminal) CopyClipboardFormat(format Format) {
+	C.vte_terminal_copy_clipboard_format(t.native(), C.VteFormat(format))
+}
+
+// CopyPrimary https://gnome.pages.gitlab.gnome.org/vte/gtk4/method.Terminal.copy_primary.html
+func (t *Terminal) CopyPrimary() {
+	C.vte_terminal_copy_primary(t.native())
+}
+
+// PasteClipboard https://gnome.pages.gitlab.gnome.org/vte/gtk4/method.Terminal.paste_clipboard.html
+func (t *Terminal) PasteClipboard() {
+	C.vte_terminal_paste_clipboard(t.native())
+}
+
+// PastePrimary https://gnome.pages.gitlab.gnome.org/vte/gtk4/method.Terminal.paste_primary.html
+func (t *Terminal) PastePrimary() {
+	C.vte_terminal_paste_primary(t.native())
+}
+
+// SelectAll https://gnome.pages.gitlab.gnome.org/vte/gtk4/method.Terminal.select_all.html
+func (t *Terminal) SelectAll() {
+	C.vte_terminal_select_all(t.native())
+}
+
+// UnselectAll https://gnome.pages.gitlab.gnome.org/vte/gtk4/method.Terminal.unselect_all.html
+func (t *Terminal) UnselectAll() {
+	C.vte_terminal_unselect_all(t.native())
+}
+
+// GetHasSelection https://gnome.pages.gitlab.gnome.org/vte/gtk4/method.Terminal.get_has_selection.html
+func (t *Terminal) GetHasSelection() bool {
+	return C.vte_terminal_get_has_selection(t.native()) != 0
+}
+
+// ConnectSelectionChanged https://gnome.pages.gitlab.gnome.org/vte/gtk4/signal.Terminal.selection-changed.html
+func (t *Terminal) ConnectSelectionChanged(f func()) glib.SignalHandle {
+	return t.Connect("selection-changed", f)
+}
+
+// SetContextMenuModel https://gnome.pages.gitlab.gnome.org/vte/gtk4/method.Terminal.set_context_menu_model.html
+// It requires vte 0.76 or later, and returns false (doing nothing) when built with an older vte.
+func (t *Terminal) SetContextMenuModel(model gio.MenuModeller) bool {
+	var m *C.GMenuModel
+	if model != nil {
+		m = (*C.GMenuModel)(unsafe.Pointer(glib.InternObject(model).Native()))
+	}
+	return C.set_context_menu_model(t.native(), m) != 0
 }
 
 func makeStrings(array []string) **C.char {
